@@ -6,6 +6,40 @@
     <title>Template</title>
   </head>
   <body>
-    <div id="content"></div>
+    <main>
+      <form>
+        <div class="row">
+          <label for="email">Email: </label>
+          <input type="email" name="email" id="email" />
+        </div>
+        <div class="row">
+          <label for="country">Country:</label>
+          <select name="country" id="country">
+            <option value=""></option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="zip-code">ZIP Code</label>
+          <input type="text" name="zip-code" id="zip-code" />
+        </div>
+        <div class="row">
+          <label for="password">Password:</label>
+          <input type="password" name="password" id="password" />
+        </div>
+        <div class="row">
+          <label for="confirm-password">Confirm Password:</label>
+          <input
+            type="password"
+            name="confirm-password"
+            id="confirm-password"
+          />
+        </div>
+      </form>
+      <div class="success-msg">
+        CONGRATULATIONS, YOU HAVE SUCCESSFULLY COMPLETED THAT FORM. AND YOU
+        PASSED ALL CHECKS CORRECTLY.
+        <button type="button" class="restart">FILL AGAIN</button>
+      </div>
+    </main>
   </body>
 </html>
