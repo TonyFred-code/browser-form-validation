@@ -1,8 +1,6 @@
-# A Project Template
+# A Browser Form Validation Project
 
-This was created as a project [link to odin project](https://www.theodinproject.com).
-
-![Sample screenshot - not linked]()
+This was created as a project to test knowledge of constraint validation api [link to odin project summary](https://www.theodinproject.com/lessons/node-path-javascript-form-validation-with-javascript).
 
 ## Table of Contents
 
@@ -14,11 +12,11 @@ This was created as a project [link to odin project](https://www.theodinproject.
 
 ## Demo
 
-<!-- You can demo it live at [Demo](https://tonyfred-code.github.io/). -->
+You can demo it live at [Demo](https://tonyfred-code.github.io/browser-form-validation).
 
 ## Built With
 
-- Some Languages
+- JS
 - HTML5
 - CSS3
 
@@ -37,3 +35,4 @@ Contributions are welcome! If you'd like to contribute to this project, please f
 This project is licensed under the [MIT LICENSE](./LICENSE)
 
 ## Acknowledgments
+Big thanks to [MDN validation articles](https://developer.mozilla.org/en-US/docs/Web/HTML/Constraint_validation).
