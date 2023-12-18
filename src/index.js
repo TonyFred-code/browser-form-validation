@@ -164,41 +164,45 @@ function passwordStrengthCheck(checkPassword, minPasswordLength = 16) {
   return { strengthPercentage, criteria };
 }
 
+function getPasswordErrorMsg(criteria) {
+  let errorMsg = '';
+
+  const keys = Object.keys(criteria);
+  keys.forEach((key) => {
+    if (!criteria[key]) {
+      switch (key) {
+        case 'length':
+          errorMsg += 'Password must be at least 16 characters long.\n';
+          break;
+        case 'lowercaseLetters':
+          errorMsg += 'Password must contain lower case letters.\n';
+          break;
+
+        case 'uppercaseLetters':
+          errorMsg += 'Password must contain upper case letters.\n';
+          break;
+
+        case 'numbers':
+          errorMsg += 'Password must contain numbers.\n';
+          break;
+
+        default:
+          break;
+      }
+    }
+  });
+
+  return errorMsg;
+}
+
 password.addEventListener('input', () => {
   const { value } = password;
 
   const { strengthPercentage, criteria } = passwordStrengthCheck(value);
 
   if (strengthPercentage < 100) {
-    let errorMsg = '';
+    const errorMsg = getPasswordErrorMsg(criteria);
 
-    // password.setCustomValidity(
-    //   'Password must contain uppercase letters, lowercase letters, numbers, symbols, and must contain at least 16 characters'
-    // );
-    const keys = Object.keys(criteria);
-    keys.forEach((key) => {
-      if (!criteria[key]) {
-        switch (key) {
-          case 'length':
-            errorMsg += 'Password must be at least 16 characters long.\n';
-            break;
-          case 'lowercaseLetters':
-            errorMsg += 'Password must contain lower case letters.\n';
-            break;
-
-          case 'uppercaseLetters':
-            errorMsg += 'Password must contain upper case letters.\n';
-            break;
-
-          case 'numbers':
-            errorMsg += 'Password must contain numbers.\n';
-            break;
-
-          default:
-            break;
-        }
-      }
-    });
     password.setCustomValidity(errorMsg);
   } else {
     password.setCustomValidity('');
@@ -236,12 +240,12 @@ form.addEventListener('submit', (e) => {
 
   const passwordValue = password.value;
 
-  const passwordStrength = passwordStrengthCheck(passwordValue);
+  const { strengthPercentage, criteria } = passwordStrengthCheck(passwordValue);
 
-  if (passwordStrength < 100) {
-    password.setCustomValidity(
-      'Password must contain uppercase letters, lowercase letters, numbers, symbols, and must contain at least 16 characters'
-    );
+  if (strengthPercentage < 100) {
+    const errorMsg = getPasswordErrorMsg(criteria);
+
+    password.setCustomValidity(errorMsg);
     password.reportValidity();
     return;
   }
