@@ -1,0 +1,93 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+  height: 100%;
+  width: 100%;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  perspective: 1000px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 12px;
+  width: 400px;
+  height: 400px;
+  justify-content: center;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.row label {
+}
+
+.row input, .row select {
+    height: 22.3px;
+    padding-left: 6px;
+}
+
+.row select {
+}
+
+input[type='text'] {
+}
+
+input:invalid,
+select:invalid {
+  border: 2px solid red;
+}
+
+input:invalid:focus,
+select:invalid:focus {
+  outline: none;
+}
+
+.success-msg {
+  /* transform: translateZ(-120px);
+     */
+  display: none;
+  flex-direction: column;
+}
+
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  justify-self: end;
+}
+
+.btn-group button {
+  outline: none;
+  border: 2px solid;
+  font-size: 19px;
+  padding: 12px;
+}
+
+form.hide {
+  display: none;
+}
+
+form.hide ~ .success-msg {
+  display: flex;
+}
