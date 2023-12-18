@@ -92,6 +92,44 @@ email.addEventListener('input', () => {
   email.reportValidity();
 });
 
+const zipCodeConstraints = {
+    // TODO: ADD MORE COUNTRY ZIP CODE CONSTRAINTS
+  CH: [
+    '^(CH-)?\\d{4}$',
+    'Switzerland ZIPs must have exactly 4 digits: e.g. CH-1950 or 1950',
+  ],
+  FR: [
+    '^(F-)?\\d{5}$',
+    'France ZIPs must have exactly 5 digits: e.g. F-75012 or 75012',
+  ],
+  DE: [
+    '^(D-)?\\d{5}$',
+    'Germany ZIPs must have exactly 5 digits: e.g. D-12345 or 12345',
+  ],
+  NL: [
+    '^(NL-)?\\d{4}\\s*([A-RT-Z][A-Z]|S[BCE-RT-Z])$',
+    'Netherland ZIPs must have exactly 4 digits, followed by 2 letters except SA, SD and SS',
+  ],
+};
+
+zipCode.addEventListener('input', () => {
+  const countryValue = country.value;
+  const constraint = zipCodeConstraints[countryValue];
+  const { value } = zipCode;
+
+  if (constraint) {
+    const constraintRegExp = new RegExp(constraint[0]);
+
+    if (constraintRegExp.test(value)) {
+      zipCode.setCustomValidity('');
+    } else {
+      zipCode.setCustomValidity(zipCodeConstraints[countryValue][1]);
+    }
+
+    zipCode.reportValidity();
+  }
+});
+
 function passwordStrengthCheck(checkPassword, minPasswordLength = 16) {
   const criteria = {
     lowercaseLetters: /[a-z]/.test(checkPassword),
@@ -191,6 +229,20 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
+  const countryValue = country.value;
+  const constraint = zipCodeConstraints[countryValue];
+  const zipCodeValue = zipCode.value;
+
+  if (constraint) {
+    const constraintRegExp = new RegExp(constraint[0]);
+
+    if (!constraintRegExp.test(zipCodeValue)) {
+      zipCode.setCustomValidity(zipCodeConstraints[countryValue][1]);
+      zipCode.reportValidity();
+      return;
+    }
+  }
+
   const passwordValue = password.value;
 
   const { strengthPercentage, criteria } = passwordStrengthCheck(passwordValue);
@@ -210,8 +262,6 @@ form.addEventListener('submit', (e) => {
     confirmPassword.reportValidity();
     return;
   }
-
-  //   const successMsgDiv = document.querySelector('.success-msg');
 
   form.classList.add('hide');
 });
