@@ -139,12 +139,52 @@ email.addEventListener('input', () => {
   email.reportValidity();
 });
 
+function passwordStrengthCheck(checkPassword, minPasswordLength = 16) {
+  const criteria = {
+    lowercaseLetters: /[a-z]/.test(checkPassword),
+    uppercaseLetters: /[A-Z]/.test(checkPassword),
+    numbers: /[0-9]/.test(checkPassword),
+    specialCharacters: /\W/.test(checkPassword),
+    length: checkPassword.length >= minPasswordLength,
+  };
+
+  let strength = 0;
+
+  const keys = Object.keys(criteria);
+  const keysCount = keys.length;
+
+  keys.forEach((key) => {
+    if (criteria[key]) {
+      strength += 1;
+    }
+  });
+
+  const strengthPercentage = (strength / keysCount) * 100;
+  return strengthPercentage;
+}
+
+password.addEventListener('input', () => {
+  const { value } = password;
+
+  const passwordStrength = passwordStrengthCheck(value);
+
+  if (passwordStrength < 100) {
+    password.setCustomValidity(
+      'Password must contain uppercase letters, lowercase letters, numbers, symbols, and must contain at least 16 characters'
+    );
+  } else {
+    password.setCustomValidity('');
+  }
+
+  password.reportValidity();
+});
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const { value } = email;
+  const emailValue = email.value;
 
-  const emailValid = value.trim() !== '' || emailRegExp.test(email.value);
+  const emailValid = emailValue.trim() !== '' || emailRegExp.test(email.value);
 
   if (!emailValid) {
     email.setCustomValidity('Please input a valid email');
@@ -152,6 +192,18 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
-  console.log('valid email');
-  console.log(email.value);
+  const passwordValue = password.value;
+
+  const passwordStrength = passwordStrengthCheck(passwordValue);
+
+  if (passwordStrength < 100) {
+    password.setCustomValidity(
+      'Password must contain uppercase letters, lowercase letters, numbers, symbols, and must contain at least 16 characters'
+    );
+    password.reportValidity();
+    return;
+  }
+
+  console.log('valid email: ', emailValue);
+  console.log('valid password: ', passwordValue);
 });
