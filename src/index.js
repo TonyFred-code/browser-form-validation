@@ -144,9 +144,10 @@ function passwordStrengthCheck(checkPassword, minPasswordLength = 16) {
     lowercaseLetters: /[a-z]/.test(checkPassword),
     uppercaseLetters: /[A-Z]/.test(checkPassword),
     numbers: /[0-9]/.test(checkPassword),
-    specialCharacters: /\W/.test(checkPassword),
     length: checkPassword.length >= minPasswordLength,
   };
+
+  // specialCharacters: /\W/.test(checkPassword),
 
   let strength = 0;
 
@@ -160,23 +161,64 @@ function passwordStrengthCheck(checkPassword, minPasswordLength = 16) {
   });
 
   const strengthPercentage = (strength / keysCount) * 100;
-  return strengthPercentage;
+  return { strengthPercentage, criteria };
 }
 
 password.addEventListener('input', () => {
   const { value } = password;
 
-  const passwordStrength = passwordStrengthCheck(value);
+  const { strengthPercentage, criteria } = passwordStrengthCheck(value);
 
-  if (passwordStrength < 100) {
-    password.setCustomValidity(
-      'Password must contain uppercase letters, lowercase letters, numbers, symbols, and must contain at least 16 characters'
-    );
+  if (strengthPercentage < 100) {
+    let errorMsg = '';
+
+    // password.setCustomValidity(
+    //   'Password must contain uppercase letters, lowercase letters, numbers, symbols, and must contain at least 16 characters'
+    // );
+    const keys = Object.keys(criteria);
+    keys.forEach((key) => {
+      if (!criteria[key]) {
+        switch (key) {
+          case 'length':
+            errorMsg += 'Password must be at least 16 characters long.\n';
+            break;
+          case 'lowercaseLetters':
+            errorMsg += 'Password must contain lower case letters.\n';
+            break;
+
+          case 'uppercaseLetters':
+            errorMsg += 'Password must contain upper case letters.\n';
+            break;
+
+          case 'numbers':
+            errorMsg += 'Password must contain numbers.\n';
+            break;
+
+          default:
+            break;
+        }
+      }
+    });
+    password.setCustomValidity(errorMsg);
   } else {
     password.setCustomValidity('');
   }
 
   password.reportValidity();
+});
+
+confirmPassword.addEventListener('input', () => {
+  const passwordValue = password.value;
+
+  const confirmPasswordValue = confirmPassword.value;
+
+  if (passwordValue !== confirmPasswordValue) {
+    confirmPassword.setCustomValidity('Passwords do not match');
+  } else {
+    confirmPassword.setCustomValidity('');
+  }
+
+  confirmPassword.reportValidity();
 });
 
 form.addEventListener('submit', (e) => {
@@ -204,6 +246,15 @@ form.addEventListener('submit', (e) => {
     return;
   }
 
-  console.log('valid email: ', emailValue);
-  console.log('valid password: ', passwordValue);
+  const confirmPasswordValue = confirmPassword.value;
+
+  if (passwordValue !== confirmPasswordValue) {
+    confirmPassword.setCustomValidity('Passwords do not match');
+    confirmPassword.reportValidity();
+    return;
+  }
+
+  //   const successMsgDiv = document.querySelector('.success-msg');
+
+  form.classList.add('hide');
 });
